@@ -1,3 +1,6 @@
 streamlit
 yt-dlp
-ffmpeg 
+pydub
+requests
+python-dotenv
+ffmpeg-python
