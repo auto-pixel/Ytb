@@ -708,7 +708,7 @@ def main():
     st.markdown("""
     <div class="main-header">
         <h1>🎬 YouTube Downloader Pro</h1>
-        <p>Professional video downloader with enhanced error handling & scalability</p>
+        <p>Professional video downloader</p>
         <small>Powered by yt-dlp • Built with Streamlit</small>
     </div>
     """, unsafe_allow_html=True)
@@ -1293,3 +1293,4 @@ if __name__ == "__main__":
             4. Update dependencies: `pip install --upgrade yt-dlp streamlit`
             5. Make sure you have sufficient disk space
             """)
+
