@@ -36,6 +36,28 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Theme configuration
+st.markdown("""
+    <style>
+        [data-testid="stAppViewContainer"] {
+            background-color: #1e1e1e !important;
+            color: #a8a19f !important;
+        }
+        .stApp {
+            background-color: #1e1e1e;
+            color: #a8a19f;
+        }
+        .css-18e3th9 {
+            background-color: #1e1e1e;
+            color: #a8a19f;
+        }
+        .css-1d391kg {
+            background-color: #1e1e1e;
+            color: #a8a19f;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 # Custom CSS for professional styling
 st.markdown("""
 <style>
@@ -687,7 +709,7 @@ def main():
     <div class="main-header">
         <h1>🎬 YouTube Downloader Pro</h1>
         <p>Professional video downloader with enhanced error handling & scalability</p>
-        <small>Powered by CP</small>
+        <small>Powered by yt-dlp • Built with Streamlit</small>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1270,5 +1292,4 @@ if __name__ == "__main__":
             3. Check internet connection
             4. Update dependencies: `pip install --upgrade yt-dlp streamlit`
             5. Make sure you have sufficient disk space
-
             """)
