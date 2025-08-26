@@ -4,3 +4,5 @@ pydub
 requests
 python-dotenv
 ffmpeg-python
+fake-useragent
+requests
