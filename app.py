@@ -225,11 +225,24 @@ class EnhancedYouTubeDownloader:
                 'socket_timeout': timeout,
                 'extract_flat': False,
                 'ignoreerrors': False,
-                # Disable subtitle extraction during info gathering to avoid 429 errors
+                'nocheckcertificate': True,
+                'retries': 10,
+                'fragment_retries': 10,
+                'skip_unavailable_fragments': True,
+                'http_headers': {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+                    'Accept-Language': 'en-US,en;q=0.9',
+                    'Referer': 'https://www.youtube.com/',
+                    'Origin': 'https://www.youtube.com',
+                    'DNT': '1',
+                },
+                'cookiefile': os.path.join(os.path.dirname(os.path.abspath(__file__)), 'youtube.cookies'),
+                'cachedir': os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache'),
                 'writesubtitles': False,
                 'writeautomaticsub': False,
-                # Add user agent to avoid blocking
-                'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                'sleep_interval': 5,
+                'max_sleep_interval': 10
             }
             
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -345,21 +358,46 @@ class EnhancedYouTubeDownloader:
             'no_warnings': False,
             'extract_flat': False,
             
-            # Network settings
-            'socket_timeout': 30,
-            'retries': self.retry_config['max_retries'],
-            'fragment_retries': self.retry_config['max_retries'],
+            # Network settings with better retry logic
+            'socket_timeout': 60,
+            'retries': 10,  # Increased retry attempts
+            'fragment_retries': 10,  # Increased fragment retries
+            'file_access_retries': 10,
+            'retry_sleep': 5,  # Base delay between retries
+            'fragment_retry_sleep': 5,  # Base delay between fragment retries
+            'skip_unavailable_fragments': True,
+            'keep_fragments': True,
             'retry_sleep_functions': {
                 'http': lambda n: min(self.retry_config['retry_delay'] * (self.retry_config['backoff_multiplier'] ** n), 60),
                 'fragment': lambda n: min(self.retry_config['retry_delay'] * (self.retry_config['backoff_multiplier'] ** n), 60)
             },
             
-            # User agent to avoid blocking
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            # Browser-like headers to avoid detection
+            'http_headers': {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Referer': 'https://www.youtube.com/',
+                'Origin': 'https://www.youtube.com',
+                'DNT': '1',
+            },
             
             # Avoid subtitle issues that cause 429 errors
             'writesubtitles': False,
             'writeautomaticsub': False,
+            
+            # Additional settings to avoid detection
+            'extractor_retries': 3,
+            'sleep_interval': 5,  # Add delay between requests
+            'max_sleep_interval': 10,
+            'nocheckcertificate': True,
+            'no_color': True,
+            'quiet': True,
+            'no_warnings': True,
+            
+            # Use cookies to maintain session
+            'cookiefile': os.path.join(os.path.dirname(os.path.abspath(__file__)), 'youtube.cookies'),
+            'cachedir': os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache')
         }
         
         download_type = download_config.get('type', 'best')
